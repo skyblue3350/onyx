@@ -1,0 +1,44 @@
+{
+  "name": "onyx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "assets/browser/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ./",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/skyblue3350/onyx.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skyblue3350/onyx/issues"
+  },
+  "homepage": "https://github.com/skyblue3350/onyx/README.md",
+  "dependencies": {
+    "css-loader": "^3.4.2",
+    "electron": "^8.0.1",
+    "file-loader": "^5.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
+    "style-loader": "^1.1.3",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.1",
+    "@types/react": "^16.9.20",
+    "@types/react-dom": "^16.9.5",
+    "@types/semantic-ui": "^2.2.7",
+    "@types/webpack": "^4.41.6"
+  }
+}
