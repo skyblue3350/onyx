@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Menu, Icon, Sidebar, Segment, Popup, Button } from 'semantic-ui-react';
+import { Menu, Icon, Sidebar, Segment, Popup, Button, List } from 'semantic-ui-react';
 
 export interface Props {
 }
@@ -20,7 +20,7 @@ export default class App extends React.Component<Props, State> {
     render(): JSX.Element {
         return (
             <>
-                <Sidebar.Pushable as={Segment}>
+                <Sidebar.Pushable as={Segment} style={{overflowY: 'hidden'}}>
                     <Sidebar
                         as={Menu}
                         visible={true}
@@ -29,7 +29,7 @@ export default class App extends React.Component<Props, State> {
                         // inverted
                         icon={!this.state.expand}
                         width={this.state.expand? 'thin': 'very thin'}
-                        style={{display: 'flex', height: '100%'}}
+                        style={{display: 'flex'}}
                         >
                         {[1, 2, 3].map(i => {
                             const item = (
@@ -43,6 +43,7 @@ export default class App extends React.Component<Props, State> {
 
                             return (
                                 <Popup
+                                    key={i}
                                     trigger={item}
                                     content={'item: ' + i}
                                     position='left center'
@@ -73,20 +74,24 @@ export default class App extends React.Component<Props, State> {
                     </Sidebar>
                 
 
-                    <Sidebar.Pusher>
-                        <Segment basic>
-                            <Icon name='angle double right' size='large'/>
-                            {this.state.expand? 'Expand': null}
-
-                            <Popup
-                                trigger={<Icon name='angle double right' size='large'/>}
-                                content={2 + 'aaaaaaaaaa'}
-                                offset='0, 20px'
-                                position='right center'
-                                positionFixed
-                            />
-
-                        </Segment>
+                    <Sidebar.Pusher style={{display: 'flex', overflowX: 'scroll'}}>
+                        {[1, 2, 3].map(i => {
+                            return (
+                                <div key={i} style={{minWidth: 300, width: 300, height: '100vh', margin: 0, padding: 2, display: 'flex', flexDirection: 'column'}}>
+                                    <Segment inverted>
+                                        Stream Title
+                                        <Button icon floated='right' size='mini'>
+                                            <Icon name='exchange' />
+                                        </Button>
+                                    </Segment>
+                                    <List style={{flex: 1, overflowY: 'scroll', marginTop: 0}}>
+                                        {[...Array(30)].map(i => {
+                                            return <List.Item key={i}>a</List.Item>
+                                        })}
+                                   </List>
+                                </div>
+                            )
+                        })}
                     </Sidebar.Pusher>
                 </Sidebar.Pushable>
             </>
