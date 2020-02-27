@@ -75,7 +75,7 @@ export default class App extends React.Component<Props, State> {
                                         </Button>
                                     </Segment>
                                     <List style={{flex: 1, overflowY: 'scroll', marginTop: 0}}>
-                                        {[...Array(30)].map(i => {
+                                        {[...Array(30)].map((e, i) => {
                                             return <List.Item key={i}>a</List.Item>
                                         })}
                                    </List>
