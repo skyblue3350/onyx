@@ -20,23 +20,15 @@ export default class App extends React.Component<Props, State> {
     render(): JSX.Element {
         return (
             <>
-                <Sidebar.Pushable as={Segment} style={{overflowY: 'hidden'}}>
-                    <Sidebar
-                        as={Menu}
-                        visible={true}
-                        // compact={true}
-                        vertical
-                        // inverted
-                        icon={!this.state.expand}
-                        width={this.state.expand? 'thin': 'very thin'}
-                        style={{display: 'flex'}}
-                        >
-                        {[1, 2, 3].map(i => {
+                <div style={{display: 'flex'}}>
+                    <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
+                        <div style={{flexGrow: 1, overflowY: 'scroll'}}>
+                        {[...Array(10)].map((e, i) => {
                             const item = (
                                 <Menu.Item as='a'>
                                     <div>
                                         <Icon name='users'/>
-                                        {this.state.expand? 'Sample': null}
+                                        {this.state.expand? `Sample${i}`: null}
                                     </div>
                                 </Menu.Item>
                             )
@@ -52,9 +44,8 @@ export default class App extends React.Component<Props, State> {
                                 />
                             )
                         })}
-
-
-                        <div style={{margin: 0, marginTop: 'auto'}}>
+                        </div>
+                        <div style={{}}>
                             <Menu.Item
                                 as='a'
                                 onClick={(event, data) => this.setState({expand: !this.state.expand})}>
@@ -70,11 +61,10 @@ export default class App extends React.Component<Props, State> {
                                 </div>
                             </Menu.Item>
                         </div>
-                        
-                    </Sidebar>
+                    </Menu>
                 
 
-                    <Sidebar.Pusher style={{display: 'flex', overflowX: 'scroll'}}>
+                    <div style={{display: 'flex', overflowX: 'scroll'}}>
                         {[1, 2, 3].map(i => {
                             return (
                                 <div key={i} style={{minWidth: 300, width: 300, height: '100vh', margin: 0, padding: 2, display: 'flex', flexDirection: 'column'}}>
@@ -92,8 +82,8 @@ export default class App extends React.Component<Props, State> {
                                 </div>
                             )
                         })}
-                    </Sidebar.Pusher>
-                </Sidebar.Pushable>
+                    </div>
+                </div>
             </>
         )
     }
