@@ -22,7 +22,7 @@ export default class App extends React.Component<Props, State> {
             <>
                 <div style={{display: 'flex'}}>
                     <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
-                        <div style={{flexGrow: 1, overflowY: 'scroll'}}>
+                        <div style={{flexGrow: 1, overflowY: 'auto'}}>
                         {[...Array(10)].map((e, i) => {
                             const item = (
                                 <Menu.Item as='a'>
@@ -64,7 +64,7 @@ export default class App extends React.Component<Props, State> {
                     </Menu>
                 
 
-                    <div style={{display: 'flex', overflowX: 'scroll'}}>
+                    <div style={{display: 'flex', overflowX: 'auto'}}>
                         {[1, 2, 3].map(i => {
                             return (
                                 <div key={i} style={{minWidth: 300, width: 300, height: '100vh', margin: 0, padding: 2, display: 'flex', flexDirection: 'column'}}>
@@ -74,7 +74,7 @@ export default class App extends React.Component<Props, State> {
                                             <Icon name='exchange' />
                                         </Button>
                                     </Segment>
-                                    <List style={{flex: 1, overflowY: 'scroll', marginTop: 0}}>
+                                    <List style={{flex: 1, overflowY: 'auto', marginTop: 0}}>
                                         {[...Array(30)].map((e, i) => {
                                             return <List.Item key={i}>a</List.Item>
                                         })}
