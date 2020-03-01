@@ -12,6 +12,8 @@ export interface State {
 }
 
 export default class App extends React.Component<Props, State> {
+    streamsRef: React.RefObject<HTMLDivElement>
+
     constructor(props: Props) {
         super(props)
 
@@ -20,11 +22,19 @@ export default class App extends React.Component<Props, State> {
             streams: [{v: 'a123'}, {v: 'b123'}, {v: 'c123'}, {v: 'd123'}],
             order: [0, 1, 2, 3],
         }
+
+        this.streamsRef = React.createRef()
     }
 
     onResize(order: string[]) {
         console.log(order)
         this.setState({ order: order.map(Number) });
+    }
+
+    onClick(key: string) {
+        const index = this.state.order.findIndex(item => item == parseInt(key))
+        this.streamsRef.current!.scrollLeft = index * 300
+        console.log(index * 300)
     }
 
     render(): JSX.Element {
@@ -47,7 +57,11 @@ export default class App extends React.Component<Props, State> {
                             )
 
                             return (
-                                <Pane key={key} defaultSize={{width: '100%'}} resizable={{x: false, y: false, xy: false}}>
+                                <Pane
+                                    key={key}
+                                    defaultSize={{width: '100%'}}
+                                    resizable={{x: false, y: false, xy: false}}
+                                    onClick={this.onClick.bind(this, key)}>
                                     <Popup
                                         trigger={item}
                                         content={'Stream: ' + this.state.streams[key].v}
@@ -78,12 +92,14 @@ export default class App extends React.Component<Props, State> {
                     </Menu>
                 
 
-                    <div style={{display: 'flex', overflowX: 'auto'}}>
+                    <div style={{display: 'flex', overflowX: 'auto'}} ref={this.streamsRef}>
                         {this.state.order.map((key, index) => {
                             return (
-                                <div key={index} style={{minWidth: 300, width: 300, height: '100vh', margin: 0, padding: 2, display: 'flex', flexDirection: 'column'}}>
+                                <div
+                                    key={index}
+                                    style={{minWidth: 300, width: 300, height: '100vh', margin: 0, padding: 2, display: 'flex', flexDirection: 'column'}}>
                                     <Segment inverted style={{alignItems: 'center', display: 'flex'}}>
-                                        <div style={{flexGrow: 1}}>Stream {key}</div>
+                                        <div style={{flexGrow: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Streaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam {key}</div>
                                         <Button icon size='mini'>
                                             <Icon name='exchange' />
                                         </Button>
