@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Menu, Icon, Sidebar, Segment, Popup, Button, List } from 'semantic-ui-react';
+import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown } from 'semantic-ui-react';
 import { SortablePane, Pane } from 'react-sortable-pane';
 
 export interface Props {
@@ -34,7 +34,6 @@ export default class App extends React.Component<Props, State> {
     onClick(key: string) {
         const index = this.state.order.findIndex(item => item == parseInt(key))
         this.streamsRef.current!.scrollLeft = index * 300
-        console.log(index * 300)
     }
 
     render(): JSX.Element {
@@ -82,12 +81,12 @@ export default class App extends React.Component<Props, State> {
                                     {this.state.expand? 'Expand': null}
                                 </div>
                             </Menu.Item>
-                            <Menu.Item as='a' onDoubleClick={console.log}>
-                                <div>
-                                    <Icon name='add'/>
-                                    {this.state.expand? 'Add Stream': null}
-                                </div>
-                            </Menu.Item>
+                            <Dropdown icon={null} trigger={<div><Icon name='add'/>{this.state.expand? 'Add Item': null}</div>} className='link item'>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item>Add Github Organization</Dropdown.Item>
+                                    <Dropdown.Item>Add Stream</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </div>
                     </Menu>
                 
