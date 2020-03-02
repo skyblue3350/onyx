@@ -91,7 +91,7 @@ export default class App extends React.Component<Props, State> {
                     </Menu>
                 
 
-                    <div style={{display: 'flex', overflowX: 'auto'}} ref={this.streamsRef}>
+                    <div style={{display: 'flex', overflowX: 'auto', scrollBehavior: 'smooth'}} ref={this.streamsRef}>
                         {this.state.order.map((key, index) => {
                             return (
                                 <div
