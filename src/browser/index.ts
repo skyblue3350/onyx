@@ -1,4 +1,4 @@
-import { app, App, BrowserWindow } from 'electron';
+import { app, App, BrowserWindow, ipcMain } from 'electron';
 
 class SampleApp {
     private mainWindow: BrowserWindow | null = null;
@@ -20,8 +20,6 @@ class SampleApp {
         this.mainWindow = new BrowserWindow({
             width: 800,
             height: 400,
-            minWidth: 500,
-            minHeight: 200,
             acceptFirstMouse: true,
             titleBarStyle: 'hidden',
             webPreferences: {
@@ -38,6 +36,13 @@ class SampleApp {
         this.mainWindow.on('closed', () => {
             this.mainWindow = null;
         });
+
+        ipcMain.on("resize", (event, data) => {
+            const [width, height] = this.mainWindow?.getSize() as [number, number]
+            console.log(width + data.expand? +100: -100)
+            this.mainWindow?.setSize(width + (data.expand? +100: -100), height)
+        });
+
     }
 
     private onReady() {

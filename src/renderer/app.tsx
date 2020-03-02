@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown } from 'semantic-ui-react';
 import { SortablePane, Pane } from 'react-sortable-pane';
+import { ipcRenderer } from 'electron';
 
 export interface Props {
 }
@@ -34,6 +35,11 @@ export default class App extends React.Component<Props, State> {
     onClick(key: string) {
         const index = this.state.order.findIndex(item => item == parseInt(key))
         this.streamsRef.current!.scrollLeft = index * 300
+    }
+
+    onExpand(event: any, data: any) {
+        ipcRenderer.send("resize", {expand: !this.state.expand})
+        this.setState({expand: !this.state.expand})
     }
 
     render(): JSX.Element {
@@ -75,7 +81,7 @@ export default class App extends React.Component<Props, State> {
                         <div style={{}}>
                             <Menu.Item
                                 as='a'
-                                onClick={(event, data) => this.setState({expand: !this.state.expand})}>
+                                onClick={this.onExpand.bind(this)}>
                                 <div>
                                     <Icon name='angle double right'/>
                                     {this.state.expand? 'Expand': null}
