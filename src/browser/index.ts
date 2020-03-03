@@ -1,15 +1,20 @@
 import { app, App, BrowserWindow, ipcMain } from 'electron';
+import Store from 'electron-store'
+import windowStateKeeper from 'electron-window-state'
 
 class SampleApp {
     private mainWindow: BrowserWindow | null = null;
     private app: App;
     private mainURL: string = `file://${__dirname}/../renderer/index.html`
+    private store: Store<any>
+    private mainWindowState!: windowStateKeeper.State;
 
     constructor(app: App) {
         this.app = app;
         this.app.on('window-all-closed', this.onWindowAllClosed.bind(this))
         this.app.on('ready', this.create.bind(this));
         this.app.on('activate', this.onActivated.bind(this));
+        this.store = new Store()
     }
 
     private onWindowAllClosed() {
@@ -17,9 +22,13 @@ class SampleApp {
     }
 
     private create() {
+        this.mainWindowState = windowStateKeeper({})
+
         this.mainWindow = new BrowserWindow({
-            width: 800,
-            height: 400,
+            x: this.mainWindowState.x,
+            y: this.mainWindowState.y,
+            width: this.mainWindowState.width,
+            height: this.mainWindowState.height,
             acceptFirstMouse: true,
             titleBarStyle: 'hidden',
             webPreferences: {
@@ -28,6 +37,7 @@ class SampleApp {
         });
 
         this.mainWindow.loadURL(this.mainURL);
+        this.mainWindowState.manage(this.mainWindow);
 
         this.mainWindow.webContents.openDevTools({
             mode: 'detach',
