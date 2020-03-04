@@ -3,6 +3,8 @@ import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown } from 'sem
 import { SortablePane, Pane } from 'react-sortable-pane';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store'
+import AddOrganization from './components/addOrganization';
+import AddStream from './components/addStream';
 
 export interface Props {
 }
@@ -48,6 +50,8 @@ export default class App extends React.Component<Props, State> {
     render(): JSX.Element {
         return (
             <>
+                <AddOrganization open={false} />
+                <AddStream open={false} />
                 <div style={{display: 'flex', userSelect: 'none'}}>
                     <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
                         <SortablePane
