@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown } from 'semantic-ui-react';
 import { SortablePane, Pane } from 'react-sortable-pane';
 import { ipcRenderer } from 'electron';
+import Store from 'electron-store'
 
 export interface Props {
 }
@@ -14,12 +15,14 @@ export interface State {
 
 export default class App extends React.Component<Props, State> {
     streamsRef: React.RefObject<HTMLDivElement>
+    private store: Store<any>
 
     constructor(props: Props) {
         super(props)
+        this.store = new Store()
 
         this.state = {
-            expand: true,
+            expand: this.store.get('expand', true),
             streams: [{v: 'a123'}, {v: 'b123'}, {v: 'c123'}, {v: 'd123'}],
             order: [0, 1, 2, 3],
         }
@@ -83,8 +86,8 @@ export default class App extends React.Component<Props, State> {
                                 as='a'
                                 onClick={this.onExpand.bind(this)}>
                                 <div>
-                                    <Icon name='angle double right'/>
-                                    {this.state.expand? 'Expand': null}
+                                    <Icon name={this.state.expand? 'angle double left': 'angle double right'}/>
+                                    {this.state.expand? 'Collapase': null}
                                 </div>
                             </Menu.Item>
                             <Dropdown icon={null} trigger={<div><Icon name='add'/>{this.state.expand? 'Add Item': null}</div>} className='link item'>

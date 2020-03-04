@@ -47,10 +47,11 @@ class SampleApp {
             this.mainWindow = null;
         });
 
-        ipcMain.on("resize", (event, data) => {
+        ipcMain.on('resize', (event, data) => {
             const [width, height] = this.mainWindow?.getSize() as [number, number]
-            console.log(width + data.expand? +100: -100)
             this.mainWindow?.setSize(width + (data.expand? +100: -100), height)
+
+            this.store.set('expand', data.expand)
         });
 
     }
