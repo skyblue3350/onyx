@@ -1,6 +1,7 @@
-import { app, App, BrowserWindow, ipcMain } from 'electron';
+import { app, App, BrowserWindow, ipcMain, Menu } from 'electron';
 import Store from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
+import TemplateMenu from './ApplicationMenu';
 
 class SampleApp {
     private mainWindow: BrowserWindow | null = null;
@@ -38,6 +39,9 @@ class SampleApp {
 
         this.mainWindow.loadURL(this.mainURL);
         this.mainWindowState.manage(this.mainWindow);
+
+        const menu = Menu.buildFromTemplate(TemplateMenu);
+        Menu.setApplicationMenu(menu)
 
         this.mainWindow.webContents.openDevTools({
             mode: 'detach',
