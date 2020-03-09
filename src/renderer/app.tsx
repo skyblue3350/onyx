@@ -13,6 +13,10 @@ export interface State {
     expand: boolean
     streams: any
     order: number[]
+    modal: {
+        organization: boolean
+        stream: boolean
+    }
 }
 
 export default class App extends React.Component<Props, State> {
@@ -27,6 +31,10 @@ export default class App extends React.Component<Props, State> {
             expand: this.store.get('expand', true),
             streams: [{v: 'a123'}, {v: 'b123'}, {v: 'c123'}, {v: 'd123'}],
             order: [0, 1, 2, 3],
+            modal: {
+                organization: false,
+                stream: false,
+            }
         }
 
         this.streamsRef = React.createRef()
@@ -50,8 +58,12 @@ export default class App extends React.Component<Props, State> {
     render(): JSX.Element {
         return (
             <>
-                <AddOrganization open={false} />
-                <AddStream open={false} />
+                <AddOrganization
+                    open={this.state.modal.organization}
+                    onClose={() => this.setState({modal: {...this.state.modal, organization: false}})} />
+                <AddStream
+                    open={this.state.modal.stream}
+                    onClose={() => this.setState({modal: {...this.state.modal, stream: false}})} />
                 <div style={{display: 'flex', userSelect: 'none'}}>
                     <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
                         <SortablePane
@@ -96,8 +108,12 @@ export default class App extends React.Component<Props, State> {
                             </Menu.Item>
                             <Dropdown icon={null} trigger={<div><Icon name='add'/>{this.state.expand? 'Add Item': null}</div>} className='link item'>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item>Add Github Organization</Dropdown.Item>
-                                    <Dropdown.Item>Add Stream</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => this.setState({modal: {...this.state.modal, organization: true}})}
+                                        content="Add Github Organization" />
+                                    <Dropdown.Item
+                                        onClick={() => this.setState({modal: {...this.state.modal, stream: true}})}
+                                        content='Add Stream' />
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
