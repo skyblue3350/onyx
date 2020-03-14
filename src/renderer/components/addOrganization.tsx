@@ -24,6 +24,9 @@ export default class AddOrganization extends React.Component<Props, State> {
                     <Modal.Header>Add Your Github Organization</Modal.Header>
                     <Modal.Content>
                         <Form>
+                        <Form.Field>
+                                <Input label='Name' placeholder='All Issue' fluid/>
+                            </Form.Field>
                             <Form.Field>
                                 <Input label='Github API' placeholder='api.github.com' fluid/>
                             </Form.Field>

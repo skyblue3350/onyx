@@ -28,6 +28,9 @@ export default class AddStream extends React.Component<Props, State> {
                                 <Input label='Name' placeholder='All Issue' fluid/>
                             </Form.Field>
                             <Form.Field>
+                                <Input label='Organization' placeholder='Select box' fluid/>
+                            </Form.Field>
+                            <Form.Field>
                                 <Input label='Query' placeholder='is:issue' fluid/>
                             </Form.Field>
                             <Form.Field>
