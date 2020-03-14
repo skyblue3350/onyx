@@ -5,6 +5,7 @@ import { ipcRenderer } from 'electron';
 import Store from 'electron-store'
 import AddOrganization from './components/addOrganization';
 import AddStream from './components/addStream';
+import { Organization, Stream } from '../types/config';
 
 export interface Props {
 }
@@ -16,6 +17,10 @@ export interface State {
     modal: {
         organization: boolean
         stream: boolean
+    }
+    configs: {
+        organizations: Organization[]
+        streams: Stream[]
     }
 }
 
@@ -38,6 +43,13 @@ export default class App extends React.Component<Props, State> {
         }
 
         this.streamsRef = React.createRef()
+
+        ipcRenderer.on("addOrganization", (_, data) => {
+            this.setState({modal: {...this.state.modal, organization: true}})
+        })
+        ipcRenderer.on("addStream", (_, data) => {
+            this.setState({modal: {...this.state.modal, stream: true}})
+        })
     }
 
     onResize(order: string[]) {

@@ -1,4 +1,6 @@
-const TemplateMenu: any = [
+import { SampleApp } from '.'
+
+const TemplateMenu: any = (window: SampleApp) => [
     {
         label: 'File',
         submenu: [
@@ -10,20 +12,26 @@ const TemplateMenu: any = [
         submenu: [
             {
                 label: 'Reload',
-                acclerator: 'CmdOrCtrl+R',
+                accelerator: 'CmdOrCtrl+R',
                 click: (item: any, focusWindow: any) => {
                     if(focusWindow) focusWindow.reload()
                 },
             },
-            {type: 'separator'},
-            {
-                label: 'View mode',
-                submenu: [
-                    {label: 'One column mode'},
-                    {label: 'Multi column mode'},
-                ]
-            },
-            {type: 'separator'},
+            // {type: 'separator'},
+            // {
+            //     label: 'View mode',
+            //     submenu: [
+            //         {
+            //             label: 'One column mode',
+            //             click: () => window.onModeChanged(ViewMode.OneColumn),
+            //         },
+            //         {
+            //             label: 'Multi column mode',
+            //             click: () => window.onModeChanged(ViewMode.MultiColumn),
+            //         },
+            //     ]
+            // },
+            // {type: 'separator'},
             {role: 'togglefullscreen',}
         ]
     },
@@ -32,9 +40,11 @@ const TemplateMenu: any = [
         submenu: [
             {
                 label: 'Add Organization',
+                click: () => {window.mainWindow?.webContents.send('addOrganization')}
             },
             {
                 label: 'Add Stream',
+                click: () => {window.mainWindow?.webContents.send('addStream')}
             },
             {
                 label: 'List Organization / Stream',

@@ -2,13 +2,14 @@ import { app, App, BrowserWindow, ipcMain, Menu } from 'electron';
 import Store from 'electron-store'
 import windowStateKeeper from 'electron-window-state'
 import TemplateMenu from './ApplicationMenu';
+import { ViewMode } from '../types/ViewMode';
 
-class SampleApp {
-    private mainWindow: BrowserWindow | null = null;
-    private app: App;
-    private mainURL: string = `file://${__dirname}/../renderer/index.html`
-    private store: Store<any>
-    private mainWindowState!: windowStateKeeper.State;
+export class SampleApp {
+    mainWindow: BrowserWindow | null = null;
+    app: App;
+    mainURL: string = `file://${__dirname}/../renderer/index.html`
+    store: Store<any>
+    mainWindowState!: windowStateKeeper.State;
 
     constructor(app: App) {
         this.app = app;
@@ -18,11 +19,19 @@ class SampleApp {
         this.store = new Store()
     }
 
-    private onWindowAllClosed() {
+    onWindowAllClosed() {
         this.app.quit();
     }
 
-    private create() {
+    onModeChanged(viewMode: ViewMode) {
+        if (ViewMode.OneColumn == viewMode) {
+            const [width, height] = this.mainWindow?.getSize() as [number, number]
+            const expand =this.store.get('expand', true)
+            this.mainWindow?.setSize(316 + (expand? 150: 50), height)
+        }
+    }
+
+    create() {
         this.mainWindowState = windowStateKeeper({})
 
         this.mainWindow = new BrowserWindow({
@@ -40,7 +49,7 @@ class SampleApp {
         this.mainWindow.loadURL(this.mainURL);
         this.mainWindowState.manage(this.mainWindow);
 
-        const menu = Menu.buildFromTemplate(TemplateMenu);
+        const menu = Menu.buildFromTemplate(TemplateMenu(this));
         Menu.setApplicationMenu(menu)
 
         this.mainWindow.webContents.openDevTools({
@@ -60,11 +69,11 @@ class SampleApp {
 
     }
 
-    private onReady() {
+    onReady() {
         this.create();
     }
 
-    private onActivated() {
+    onActivated() {
         if (this.mainWindow === null) {
             this.create();
         }
