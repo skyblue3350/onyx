@@ -39,6 +39,10 @@ export default class App extends React.Component<Props, State> {
             modal: {
                 organization: false,
                 stream: false,
+            },
+            configs: {
+                organizations: [],
+                streams: [],
             }
         }
 
