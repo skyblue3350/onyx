@@ -10,6 +10,6 @@ export interface Stream {
     query: string
     icon: string
     color: string
-    notification: true
+    notification: boolean
     organizationName: string
 }
