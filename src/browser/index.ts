@@ -40,7 +40,6 @@ export class SampleApp {
             width: this.mainWindowState.width,
             height: this.mainWindowState.height,
             acceptFirstMouse: true,
-            titleBarStyle: 'hidden',
             webPreferences: {
                 nodeIntegration: true
             }
