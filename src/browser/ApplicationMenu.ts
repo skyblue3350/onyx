@@ -40,10 +40,12 @@ const TemplateMenu: any = (window: SampleApp) => [
         submenu: [
             {
                 label: 'Add Organization',
+                accelerator: 'CmdOrCtrl+Shift+O',
                 click: () => {window.mainWindow?.webContents.send('addOrganization')}
             },
             {
                 label: 'Add Stream',
+                accelerator: 'CmdOrCtrl+Shift+A',
                 click: () => {window.mainWindow?.webContents.send('addStream')}
             },
             {
