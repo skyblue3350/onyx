@@ -1,1 +1,2 @@
-# electron-template-ts-react
+# onyx
+Github Issue Client
