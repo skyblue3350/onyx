@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown } from 'semantic-ui-react';
+import { Menu, Icon, Sidebar, Segment, Popup, Button, List, Dropdown, SemanticICONS } from 'semantic-ui-react';
 import { SortablePane, Pane } from 'react-sortable-pane';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store'
 import AddOrganization from './components/addOrganization';
 import AddStream from './components/addStream';
 import { Organization, Stream } from '../types/config';
+import { SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 
 export interface Props {
 }
 
 export interface State {
     expand: boolean
-    streams: any
     order: number[]
     modal: {
         organization: boolean
@@ -34,15 +34,14 @@ export default class App extends React.Component<Props, State> {
 
         this.state = {
             expand: this.store.get('expand', true),
-            streams: [{v: 'a123'}, {v: 'b123'}, {v: 'c123'}, {v: 'd123'}],
-            order: [0, 1, 2, 3],
+            order: this.store.get('order', [...(this.store.get('streams', []).keys())]),
             modal: {
                 organization: false,
                 stream: false,
             },
             configs: {
-                organizations: [],
-                streams: [],
+                organizations: this.store.get('organizations', []),
+                streams: this.store.get('streams', []),
             }
         }
 
@@ -56,13 +55,34 @@ export default class App extends React.Component<Props, State> {
         })
     }
 
-    onResize(order: string[]) {
-        console.log(order)
-        this.setState({ order: order.map(Number) });
+    addOrganization(org: Organization) {
+        const organizations = this.store.get('organizations', []) as Organization[]
+        organizations.push(org)
+        this.store.set('organizations', organizations)
+        this.setState({
+            modal: {...this.state.modal, organization: false},
+            configs: {...this.state.configs, organizations: organizations},
+        })
     }
 
-    onClick(key: string) {
-        const index = this.state.order.findIndex(item => item == parseInt(key))
+    addStream(stream: Stream) {
+        const streams = this.store.get('streams', []) as Stream[]
+        const i = streams.push(stream)
+        this.store.set('streams', streams)
+        this.setState({
+            order: [...this.state.order, i - 1],
+            modal: {...this.state.modal, stream: false},
+            configs: {...this.state.configs, streams: streams},
+        })
+    }
+
+    onOrderChange(order: string[]) {
+        this.setState({ order: order.map(Number) })
+        this.store.set('order', this.state.order)
+    }
+
+    onClick(key: number) {
+        const index = this.state.order.findIndex(item => item == key)
         this.streamsRef.current!.scrollLeft = index * 300
     }
 
@@ -76,35 +96,39 @@ export default class App extends React.Component<Props, State> {
             <>
                 <AddOrganization
                     open={this.state.modal.organization}
+                    onSubmit={(data) => this.addOrganization(data)}
                     onClose={() => this.setState({modal: {...this.state.modal, organization: false}})} />
                 <AddStream
                     open={this.state.modal.stream}
+                    onSubmit={(data) => this.addStream(data)}
                     onClose={() => this.setState({modal: {...this.state.modal, stream: false}})} />
                 <div style={{display: 'flex', userSelect: 'none'}}>
                     <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
                         <SortablePane
                             direction="vertical"
-                            onOrderChange={this.onResize.bind(this)}
+                            onOrderChange={this.onOrderChange.bind(this)}
                             style={{flexGrow: 1, overflowX: 'hidden', overflowY: 'auto'}}>
-                        {Object.keys(this.state.order).map((key) => {
+                        {this.state.order.map((key, index) => {
+                            const stream = this.state.configs.streams[key]
+
                             const item = (
                                 <Menu.Item as='a'>
                                     <div>
-                                        <Icon name='users'/>
-                                        {this.state.expand? `Stream${key}`: null}
+                                        <Icon name={stream.icon as SemanticICONS} color={stream.color as SemanticCOLORS } />
+                                        {this.state.expand? stream.name: null}
                                     </div>
                                 </Menu.Item>
                             )
 
                             return (
                                 <Pane
-                                    key={key}
+                                    key={key.toString()}
                                     defaultSize={{width: '100%'}}
                                     resizable={{x: false, y: false, xy: false}}
-                                    onClick={this.onClick.bind(this, key)}>
+                                    onClick={(id: number) => this.onClick(id)}>
                                     <Popup
                                         trigger={item}
-                                        content={'Stream: ' + this.state.streams[key].v}
+                                        content={'Stream: ' + this.state.configs.streams[key].name}
                                         position='left center'
                                         positionFixed
                                         style={{left: 120}}
@@ -150,7 +174,7 @@ export default class App extends React.Component<Props, State> {
                                     </Segment>
                                     <List style={{flex: 1, overflowY: 'auto', marginTop: 0}}>
                                         {[...Array(30)].map((e, i) => {
-                                            return <List.Item key={i} style={{height: 100}}>{this.state.streams[key].v}</List.Item>
+                                            return <List.Item key={i} style={{height: 100}}>{this.state.configs.streams[key].name}</List.Item>
                                         })}
                                    </List>
                                 </div>
