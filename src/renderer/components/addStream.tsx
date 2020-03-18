@@ -26,7 +26,6 @@ export default class AddStream extends React.Component<Props, State> {
     }
 
     onSubmit() {
-        console.log(this.state)
         if (this.props.onSubmit) this.props.onSubmit(this.state)
     }
 
