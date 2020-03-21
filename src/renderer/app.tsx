@@ -13,7 +13,7 @@ export interface Props {
 
 export interface State {
     expand: boolean
-    order: number[]
+    order: string[]
     modal: {
         organization: boolean
         stream: boolean
@@ -70,18 +70,18 @@ export default class App extends React.Component<Props, State> {
         const i = streams.push(stream)
         this.store.set('streams', streams)
         this.setState({
-            order: [...this.state.order, i - 1],
+            order: [...this.state.order, (i - 1).toString()],
             modal: {...this.state.modal, stream: false},
             configs: {...this.state.configs, streams: streams},
         })
     }
 
     onOrderChange(order: string[]) {
-        this.setState({ order: order.map(Number) })
+        this.setState({order})
         this.store.set('order', this.state.order)
     }
 
-    onClick(key: number) {
+    onClick(key: string) {
         const index = this.state.order.findIndex(item => item == key)
         this.streamsRef.current!.scrollLeft = index * 300
     }
@@ -106,11 +106,10 @@ export default class App extends React.Component<Props, State> {
                     <Menu vertical style={{display: 'flex', minWidth: this.state.expand? 150: 50, maxWidth: this.state.expand? 150: 50, height: '100vh'}}>
                         <SortablePane
                             direction="vertical"
+                            order={this.state.order}
                             onOrderChange={this.onOrderChange.bind(this)}
                             style={{flexGrow: 1, overflowX: 'hidden', overflowY: 'auto'}}>
-                        {this.state.order.map((key, index) => {
-                            const stream = this.state.configs.streams[key]
-
+                        {this.state.configs.streams.map((stream, index) => {
                             const item = (
                                 <Menu.Item as='a'>
                                     <div>
@@ -122,13 +121,13 @@ export default class App extends React.Component<Props, State> {
 
                             return (
                                 <Pane
-                                    key={key.toString()}
+                                    key={index.toString()}
                                     defaultSize={{width: '100%'}}
                                     resizable={{x: false, y: false, xy: false}}
-                                    onClick={(id: number) => this.onClick(id)}>
+                                    onClick={() => this.onClick(index.toString())}>
                                     <Popup
                                         trigger={item}
-                                        content={'Stream: ' + this.state.configs.streams[key].name}
+                                        content={stream.name}
                                         position='left center'
                                         positionFixed
                                         style={{left: 120}}
@@ -162,6 +161,8 @@ export default class App extends React.Component<Props, State> {
 
                     <div style={{display: 'flex', overflowX: 'auto', scrollBehavior: 'smooth'}} ref={this.streamsRef}>
                         {this.state.order.map((key, index) => {
+                            const stream = this.state.configs.streams[Number(key)]
+
                             return (
                                 <div
                                     key={index}
@@ -174,7 +175,7 @@ export default class App extends React.Component<Props, State> {
                                     </Segment>
                                     <List style={{flex: 1, overflowY: 'auto', marginTop: 0}}>
                                         {[...Array(30)].map((e, i) => {
-                                            return <List.Item key={i} style={{height: 100}}>{this.state.configs.streams[key].name}</List.Item>
+                                            return <List.Item key={i} style={{height: 100}}>{stream.name}</List.Item>
                                         })}
                                    </List>
                                 </div>
