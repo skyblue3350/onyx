@@ -99,6 +99,7 @@ export default class App extends React.Component<Props, State> {
                     onSubmit={(data) => this.addOrganization(data)}
                     onClose={() => this.setState({modal: {...this.state.modal, organization: false}})} />
                 <AddStream
+                    organizations={this.state.configs.organizations}
                     open={this.state.modal.stream}
                     onSubmit={(data) => this.addStream(data)}
                     onClose={() => this.setState({modal: {...this.state.modal, stream: false}})} />
