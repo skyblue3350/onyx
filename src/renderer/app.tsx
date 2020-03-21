@@ -124,7 +124,8 @@ export default class App extends React.Component<Props, State> {
                                     key={index.toString()}
                                     defaultSize={{width: '100%'}}
                                     resizable={{x: false, y: false, xy: false}}
-                                    onClick={() => this.onClick(index.toString())}>
+                                    onClick={() => this.onClick(index.toString())}
+                                    style={{whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>
                                     <Popup
                                         trigger={item}
                                         content={stream.name}
